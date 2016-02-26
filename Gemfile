@@ -3,6 +3,7 @@ ruby "2.2.2"
 
 gem 'sinatra', require: 'sinatra/base'
 gem 'sinatra-asset-pipeline', require: 'sinatra/asset_pipeline'
+gem 'sinatra-websocket'
 
 gem 'uglifier'
 gem 'therubyracer', platform: :ruby

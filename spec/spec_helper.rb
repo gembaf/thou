@@ -12,14 +12,14 @@ RSpec.configure do |config|
   Capybara.register_driver :poltergeist do |app|
     Capybara::Poltergeist::Driver.new(app, js_errors: true)
   end
+  Capybara.server do |app, port|
+    require 'rack/handler/thin'
+    Rack::Handler::Thin.run(app, Host: '127.0.0.1', Port: port)
+  end
 
   config.include Capybara::DSL
   config.include FactoryGirl::Syntax::Methods
   config.include WaitForAjax, type: :feature
-
-  config.after :each, js: :true do
-    wait_for_ajax
-  end
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
