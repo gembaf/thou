@@ -1,15 +1,53 @@
 feature 'get /' do
   background do
-    visit '/'
+    using_session :viewer1 do
+      visit '/'
+    end
+
+    using_session :viewer2 do
+      visit '/'
+    end
   end
 
-  scenario do
-    expect(page).to have_content 'hello sinatra'
-  end
+  context 'viewer1が送信する' do
+    background do
+      using_session :viewer1 do
+        fill_in 'name', with: 'hoge'
+        click_button 'submit'
+      end
+    end
 
-  scenario 'button click', js: true do
-    click_button 'hello sinatra'
-    expect(page).to have_content 'hoge'
+    scenario 'viewer1のリストに追加される', js: true do
+      using_session :viewer1 do
+        within('ul#name_list') do
+          expect(page).to have_content 'hoge'
+        end
+      end
+    end
+
+    scenario 'viewer2のリストにも追加される', js: true do
+      using_session :viewer2 do
+        within('ul#name_list') do
+          expect(page).to have_content 'hoge'
+        end
+      end
+    end
+
+    context 'viewer2がページを更新する' do
+      background do
+        using_session :viewer2 do
+          visit '/'
+        end
+      end
+
+      scenario 'viewer2のリストに結果が残っている', js: true do
+        using_session :viewer2 do
+          within('ul#name_list') do
+            expect(page).to have_content 'hoge'
+          end
+        end
+      end
+    end
   end
 end
 
