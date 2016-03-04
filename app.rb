@@ -21,8 +21,8 @@ set :server, 'thin'
 set :sockets, []
 set :messages, []
 
-get '/' do
-  slim :index
+get '/game' do
+  slim :game
 end
 
 get '/websocket' do
