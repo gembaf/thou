@@ -4,9 +4,23 @@
     "npm": "2.14.12"
   },
   "dependencies": {
-    "bower": "1.7.2"
+    "bower": "1.7.2",
+    "react": "^0.14.7"
   },
+  "main": "components/app.coffee",
   "scripts": {
-    "postinstall": "bower install"
+    "postinstall": "bower install",
+    "start": "watchify . -d -o assets/javascripts/components.js -v",
+    "build": "browserify . > assets/javascripts/components.js"
+  },
+  "browserify": {
+    "transform": [
+      "coffee-reactify"
+    ]
+  },
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "coffee-reactify": "^4.0.0",
+    "watchify": "^3.7.0"
   }
 }

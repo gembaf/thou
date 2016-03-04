@@ -6,5 +6,9 @@
 
 /.sass-cache
 
-/bower_components
+/node_modules
+
+/npm-debug.log
+
+/assets/javascripts/components.js
 

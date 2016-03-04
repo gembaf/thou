@@ -19,7 +19,7 @@ register Sinatra::AssetPipeline
 
 set :server, 'thin'
 set :sockets, []
-set :messages, []
+set :game, Game.new
 
 get '/' do
   slim :index
@@ -31,12 +31,14 @@ get '/websocket' do
       ws.onopen do
         settings.sockets << ws
       end
-      ws.onmessage do |msg|
-        settings.messages << msg
+
+      ws.onmessage do |data|
+        settings.game.add_user data
         settings.sockets.each do |s|
-          s.send(msg)
+          s.send(settings.game.to_hash.to_json)
         end
       end
+
       ws.onclose do
         settings.sockets.delete(ws)
       end
@@ -44,8 +46,8 @@ get '/websocket' do
   end
 end
 
-get '/messages' do
-  settings.messages = [] if settings.sockets.empty?
-  settings.messages.to_json
+get '/data' do
+  settings.game = Game.new if settings.sockets.empty?
+  settings.game.to_hash.to_json
 end
 
