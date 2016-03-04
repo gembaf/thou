@@ -8,13 +8,15 @@ $ ->
     success: (data) ->
       data.forEach (val, i) ->
         li = '<li>' + val + '</li>'
-        $('ul#name_list').append(li)
+        $('ul#user_list').append(li)
 
   ws.onmessage = (m) ->
     li = '<li>' + m.data + '</li>'
-    $('ul#name_list').append(li)
+    $('ul#user_list').append(li)
 
-  $('button').click ->
+  $('button#add_user').click ->
     ws.send($('input#name').val())
     $('input#name').val("")
+    $('#input_name').hide()
+    $('#game_start').show()
 
