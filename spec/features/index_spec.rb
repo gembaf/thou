@@ -36,7 +36,7 @@ feature 'get /' do
     context 'viewer2がページを更新する' do
       background do
         using_session :viewer2 do
-          visit '/'
+          reload
         end
       end
 
