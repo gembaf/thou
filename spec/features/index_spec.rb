@@ -1,11 +1,11 @@
-feature 'get /' do
+feature 'get /game' do
   background do
     using_session :viewer1 do
-      visit '/'
+      visit '/game'
     end
 
     using_session :viewer2 do
-      visit '/'
+      visit '/game'
     end
   end
 
@@ -36,7 +36,7 @@ feature 'get /' do
     context 'viewer2がページを更新する' do
       background do
         using_session :viewer2 do
-          visit '/'
+          visit '/game'
         end
       end
 
