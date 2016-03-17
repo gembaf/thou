@@ -9,9 +9,9 @@ feature 'get /' do
     end
   end
 
-  scenario 'ゲーム開始ボタンは見えない', js: true do
+  scenario 'ゲーム開始ボタンは存在しない', js: true do
     using_session :viewer1 do
-      expect(page).to have_selector 'button', text: 'Game Start', visible: false
+      expect(page).not_to have_button 'Game Start'
     end
   end
 
@@ -25,7 +25,7 @@ feature 'get /' do
 
     scenario 'viewer1のリストに追加される', js: true do
       using_session :viewer1 do
-        within('ul#user_list') do
+        within('.user_list') do
           expect(page).to have_content 'viewer1'
         end
       end
@@ -33,21 +33,21 @@ feature 'get /' do
 
     scenario 'viewer2のリストにも追加される', js: true do
       using_session :viewer2 do
-        within('ul#user_list') do
+        within('.user_list') do
           expect(page).to have_content 'viewer1'
         end
       end
     end
 
-    scenario 'viewer1の画面にゲーム開始ボタンが表示される' do
+    scenario 'viewer1の画面にゲーム開始ボタンが表示される', js: true do
       using_session :viewer1 do
         expect(page).to have_button 'Game Start'
       end
     end
 
-    scenario 'viewer2の画面にはゲーム開始ボタンが表示されない' do
+    scenario 'viewer2の画面にはゲーム開始ボタンが表示されない', js: true do
       using_session :viewer2 do
-        expect(page).to have_selector 'button', text: 'Game Start', visible: false
+        expect(page).not_to have_button 'Game Start'
       end
     end
 
@@ -60,7 +60,7 @@ feature 'get /' do
 
       scenario 'viewer2のリストに結果が残っている', js: true do
         using_session :viewer2 do
-          within('ul#user_list') do
+          within('.user_list') do
             expect(page).to have_content 'viewer1'
           end
         end

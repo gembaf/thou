@@ -4,6 +4,8 @@ html
     meta charset="utf-8"
     meta name="viewport" content="width=device-width, initial-scale=1.0"
     title thou
+    script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-with-addons.js"
+    script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"
     == stylesheet_tag 'application'
   body
     .navbar.navbar-default.navbar-inverse
@@ -12,9 +14,9 @@ html
           a.navbar-brand href="#" thou
     .container
       == yield
-    == javascript_tag 'application'
     footer
       .container
         hr
         p Copyright &copy; 2015 gembaf All Rights Reserved.
+    == javascript_tag 'application'
 
