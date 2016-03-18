@@ -50,22 +50,6 @@ feature 'get /' do
         expect(page).not_to have_button 'Game Start'
       end
     end
-
-    feature 'viewer2がページを更新する' do
-      background do
-        using_session :viewer2 do
-          reload
-        end
-      end
-
-      scenario 'viewer2のリストに結果が残っている', js: true do
-        using_session :viewer2 do
-          within('.user_list') do
-            expect(page).to have_content 'viewer1'
-          end
-        end
-      end
-    end
   end
 end
 

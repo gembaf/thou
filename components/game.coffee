@@ -1,30 +1,36 @@
+CommandConstants = require './command_constants.coffee'
+
 UserList = require './user_list.coffee'
 LoginForm = require './login_form.coffee'
 
 Game = React.createClass
   mixins: [React.addons.LinkedStateMixin]
 
-  ws: new WebSocket('ws://' + window.location.host + '/websocket')
-
   propTypes:
-    source: React.PropTypes.string.isRequired
+    ws: React.PropTypes.object.isRequired
 
   getInitialState: ->
     data:
       users: []
+    current_user: {}
     is_login: false
 
-  componentDidMount: ->
-    @getUserData()
-    @ws.onmessage = (m) =>
+  componentWillMount: ->
+    @props.ws.onopen = =>
+      id = Math.random().toString(36).slice(-8)
+      @setState current_user: {id: id}
+      @sendCurrentUserData(CommandConstants.ADD_CLIENT)
+    @props.ws.onmessage = (m) =>
       @setState data: JSON.parse m.data
 
-  getUserData: ->
-    $.getJSON @props.source, (data) =>
-      @setState data: data
-
-  handleLogin: ->
+  handleLogin: (name) ->
     @is_login = true
+    @state.current_user["name"] = name
+    @setState current_user: @state.current_user
+    @sendCurrentUserData(CommandConstants.SIGN_IN)
+
+  sendCurrentUserData: (cmd) ->
+    @props.ws.send JSON.stringify(command: cmd, current_user: @state.current_user)
 
   render: ->
     <div className="game">
@@ -32,7 +38,7 @@ Game = React.createClass
         {
           if !@is_login
             <div className="col-xs-12">
-              <LoginForm ws={@ws} handleLogin={@handleLogin} />
+              <LoginForm handleLogin={@handleLogin} />
             </div>
         }
         <UserList users={@state.data["users"]} />
