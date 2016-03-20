@@ -2,15 +2,13 @@ LoginForm = React.createClass
   mixins: [React.addons.LinkedStateMixin]
 
   propTypes:
-    ws: React.PropTypes.object.isRequired
     handleLogin: React.PropTypes.func.isRequired
 
   getInitialState: ->
     name: ""
 
   onClick: (e) ->
-    @props.ws.send(@state.name)
-    @props.handleLogin()
+    @props.handleLogin(@state.name)
 
   render: ->
     <div className="login_form">

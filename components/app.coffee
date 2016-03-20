@@ -1,6 +1,6 @@
 Game = require './game.coffee'
 
 ReactDOM.render(
-  <Game source="http://#{window.location.host}/data" />,
+  <Game ws={new WebSocket("ws://#{window.location.host}/websocket")} />,
   document.getElementById('game')
 )

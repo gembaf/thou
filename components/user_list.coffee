@@ -2,7 +2,7 @@ UserList = React.createClass
   propTypes:
     users: React.PropTypes.arrayOf(
       React.PropTypes.shape
-        id: React.PropTypes.number.isRequired
+        id: React.PropTypes.string.isRequired
         name: React.PropTypes.string.isRequired
     )
 

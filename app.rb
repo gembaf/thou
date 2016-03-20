@@ -18,7 +18,6 @@ set :assets_js_compressor, :uglifier
 register Sinatra::AssetPipeline
 
 set :server, 'thin'
-set :sockets, []
 set :game, Game.new
 
 get '/' do
@@ -29,25 +28,19 @@ get '/websocket' do
   if request.websocket?
     request.websocket do |ws|
       ws.onopen do
-        settings.sockets << ws
+        settings.game.add_client(ws)
       end
 
       ws.onmessage do |data|
-        settings.game.add_user data
-        settings.sockets.each do |s|
-          s.send(settings.game.to_hash.to_json)
-        end
+        data = JSON.parse data, symbolize_names: true
+        settings.game.update(ws, data)
+        settings.game.send_all
       end
 
       ws.onclose do
-        settings.sockets.delete(ws)
+        settings.game.remove_client(ws)
       end
     end
   end
-end
-
-get '/data' do
-  settings.game = Game.new if settings.sockets.empty?
-  settings.game.to_hash.to_json
 end
 

@@ -1,26 +1,29 @@
 describe Game do
   let(:game) { Game.new }
-
-  before { game.add_user 'viewer1' }
-
-  context '#add_user' do
-    before { game.add_user 'viewer2' }
-
-    it '1番目が登録されていること' do
-      expect(game.users[0][:name]).to eq 'viewer1'
-      expect(game.users[0][:id]).to eq 1
-    end
-
-    it '2番目が登録されていること' do
-      expect(game.users[1][:name]).to eq 'viewer2'
-      expect(game.users[1][:id]).to eq 2
-    end
-  end
+  let(:user) { { id: 'hogehoge', name: 'viewer' } }
+  let(:ws) { 'ws_dummy' }
 
   context '#to_hash' do
-    it do
-      expect(game.to_hash)
-        .to eq(users: [{ name: 'viewer1', id: 1 }])
+    context 'ソケットのみ繋がっている場合' do
+      before do
+        game.add_client(ws)
+        game.update(ws, command: CommandConstants::ADD_CLIENT, current_user: user)
+      end
+
+      it { expect(game.to_hash).to eq(users: []) }
+    end
+
+    context 'ユーザがサインインしている場合' do
+      before do
+        game.add_client(ws)
+        game.update(ws, command: CommandConstants::ADD_CLIENT, current_user: user)
+        game.update(ws, command: CommandConstants::SIGN_IN, current_user: user)
+      end
+
+      it do
+        expect(game.to_hash)
+          .to eq(users: [{ id: 'hogehoge', name: 'viewer' }])
+      end
     end
   end
 end
