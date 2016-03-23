@@ -33,12 +33,13 @@ get '/websocket' do
 
       ws.onmessage do |data|
         data = JSON.parse data, symbolize_names: true
-        settings.game.update(ws, data)
+        settings.game.update(ws, data[:command], data[:current_user])
         settings.game.send_all
       end
 
       ws.onclose do
         settings.game.remove_client(ws)
+        settings.game = Game.new unless settings.game.exist_clients?
       end
     end
   end

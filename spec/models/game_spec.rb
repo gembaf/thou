@@ -7,22 +7,22 @@ describe Game do
     context 'ソケットのみ繋がっている場合' do
       before do
         game.add_client(ws)
-        game.update(ws, command: CommandConstants::ADD_CLIENT, current_user: user)
+        game.update(ws, CommandConstants::ADD_CLIENT, user)
       end
 
-      it { expect(game.to_hash).to eq(users: []) }
+      it { expect(game.to_hash[:users]).to eq([]) }
     end
 
     context 'ユーザがサインインしている場合' do
       before do
         game.add_client(ws)
-        game.update(ws, command: CommandConstants::ADD_CLIENT, current_user: user)
-        game.update(ws, command: CommandConstants::SIGN_IN, current_user: user)
+        game.update(ws, CommandConstants::ADD_CLIENT, user)
+        game.update(ws, CommandConstants::SIGN_IN, user)
       end
 
       it do
-        expect(game.to_hash)
-          .to eq(users: [{ id: 'hogehoge', name: 'viewer' }])
+        expect(game.to_hash[:users])
+          .to eq([{ id: 'hogehoge', name: 'viewer' }])
       end
     end
   end
