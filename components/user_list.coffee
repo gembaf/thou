@@ -11,11 +11,7 @@ UserList = React.createClass
       <li key={"user-" + user["id"]}>{user["name"]}</li>
 
     <div className="user_list">
-      <div className="row">
-        <div className="col-xs-12">
-          <ul>{users}</ul>
-        </div>
-      </div>
+      <ul>{users}</ul>
     </div>
 
 module.exports = UserList

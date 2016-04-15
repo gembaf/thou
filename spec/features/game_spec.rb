@@ -50,6 +50,26 @@ feature 'get /' do
         expect(page).not_to have_button 'Game Start'
       end
     end
+
+    feature 'viewer1がゲーム開始ボタンを押す' do
+      background do
+        using_session :viewer1 do
+          click_button 'Game Start'
+        end
+      end
+
+      scenario 'viewer1の画面にゲーム画面が表示される', js: true do
+        using_session :viewer1 do
+          expect(page).to have_content 'ゲーム画面'
+        end
+      end
+
+      scenario 'viewer2の画面にゲーム画面が表示される', js: true do
+        using_session :viewer2 do
+          expect(page).to have_content 'ゲーム画面'
+        end
+      end
+    end
   end
 end
 
